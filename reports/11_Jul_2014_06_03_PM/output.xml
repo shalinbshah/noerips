@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 2.8.5 (Jython 2.5.3 on java1.7.0_51)" generated="20140711 18:03:58.768">
+<suite source="C:\Users\shalin.s\Documents\noerips\tests\robotframework\acceptance\temp" id="s1" name="Temp">
+<suite source="C:\Users\shalin.s\Documents\noerips\tests\robotframework\acceptance\temp\lib_test.txt" id="s1-s1" name="Lib Test">
+<kw type="setup" name="Spieron Suite SetUp">
+<doc></doc>
+<arguments>
+</arguments>
+<kw type="kw" name="Selenium2Library.Open Browser">
+<doc>Opens a new browser instance to given URL.&lt;br&gt;</doc>
+<arguments>
+<arg>about:blank</arg>
+<arg>ff</arg>
+</arguments>
+<msg timestamp="20140711 18:04:03.684" level="INFO">browserName: ff</msg>
+<msg timestamp="20140711 18:04:03.694" level="INFO">Opening browser 'ff' to base url 'about:blank'</msg>
+<status status="PASS" endtime="20140711 18:04:16.690" starttime="20140711 18:04:03.661"></status>
+</kw>
+<kw type="kw" name="Selenium2Library.Register Keyword To Run On Failure">
+<doc>Sets the actual and returns the previous keyword to execute when a</doc>
+<arguments>
+<arg>Selenium2Library.Capture Page Screenshot</arg>
+</arguments>
+<msg timestamp="20140711 18:04:16.700" level="INFO">Selenium2Library.Capture Page Screenshot will be run on failure.</msg>
+<status status="PASS" endtime="20140711 18:04:16.710" starttime="20140711 18:04:16.700"></status>
+</kw>
+<status status="PASS" endtime="20140711 18:04:16.710" starttime="20140711 18:04:03.651"></status>
+</kw>
+<test id="s1-s1-t1" name="0005_(Users Grid - Display)-list-unique-login-credential">
+<kw type="setup" name="Selenium2Library.Go To">
+<doc>Navigates the active browser instance to the provided URL.&lt;br&gt;&lt;br&gt;&lt;b&gt;Parameters:&lt;/b&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;url&lt;/b&gt;&amp;nbsp;The URL to open.&lt;br&gt;</doc>
+<arguments>
+<arg>${LOGOUT URL}</arg>
+</arguments>
+<msg timestamp="20140711 18:04:16.730" level="INFO">Opening url 'http://amw1v2localfleet1.stage.spireon.com/home/signout'</msg>
+<status status="PASS" endtime="20140711 18:04:20.748" starttime="20140711 18:04:16.730"></status>
+</kw>
+<kw type="kw" name="AdministratorPageLib.Login With">
+<doc></doc>
+<arguments>
+<arg>${USERNAME}</arg>
+<arg>${PASSWORD}</arg>
+</arguments>
+<status status="PASS" endtime="20140711 18:04:50.926" starttime="20140711 18:04:20.758"></status>
+</kw>
+<kw type="kw" name="AdministratorPageLib.Navigate To Tab">
+<doc></doc>
+<arguments>
+<arg>Admin</arg>
+</arguments>
+<status status="PASS" endtime="20140711 18:04:52.195" starttime="20140711 18:04:50.936"></status>
+</kw>
+<kw type="kw" name="AdministratorPageLib.Open Admin Section">
+<doc></doc>
+<arguments>
+<arg>Users</arg>
+</arguments>
+<status status="PASS" endtime="20140711 18:04:58.922" starttime="20140711 18:04:52.205"></status>
+</kw>
+<kw type="kw" name="AdministratorPageLib.Fail Test With Message">
+<doc></doc>
+<arguments>
+<arg>I failed It</arg>
+</arguments>
+<msg timestamp="20140711 18:04:59.272" html="yes" level="INFO">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20140711 18:04:59.322" level="FAIL">I failed It</msg>
+<status status="FAIL" endtime="20140711 18:04:59.322" starttime="20140711 18:04:58.922"></status>
+</kw>
+<doc></doc>
+<tags>
+</tags>
+<status status="FAIL" critical="yes" endtime="20140711 18:04:59.332" starttime="20140711 18:04:16.710">I failed It</status>
+</test>
+<kw type="teardown" name="Selenium2Library.Close All Browsers">
+<doc>Closes all open browser instances and resets the browser cache.&lt;br&gt;</doc>
+<arguments>
+</arguments>
+<status status="PASS" endtime="20140711 18:04:59.724" starttime="20140711 18:04:59.342"></status>
+</kw>
+<doc></doc>
+<metadata>
+</metadata>
+<status status="FAIL" endtime="20140711 18:04:59.724" starttime="20140711 18:03:59.810"></status>
+</suite>
+<doc></doc>
+<metadata>
+</metadata>
+<status status="FAIL" endtime="20140711 18:04:59.744" starttime="20140711 18:03:58.769"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1">Critical Tests</stat>
+<stat pass="0" fail="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" id="s1" fail="1" name="Temp">Temp</stat>
+<stat pass="0" id="s1-s1" fail="1" name="Lib Test">Temp.Lib Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

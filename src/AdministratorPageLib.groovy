@@ -27,6 +27,29 @@ public class AdministratorPageLib {
 	public static final boolean ROBOT_CONTINUE_ON_FAILURE = true;
 	public static final boolean ROBOT_EXIT_ON_FAILURE = true;
 
+	private static WebDriver getWebDriver() {
+		try {
+			WebDriver driver = SpireonTestBase.getWebDriver();
+			return driver;
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	private static void mouseOverViaJS(WebElement element) {
+		String javaScriptMouseOver = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
+		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+		executor.executeScript(javaScriptMouseOver, element);
+	}
+
+	private static void mouseClickViaJS(WebElement element) {
+		String javaScriptClick = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"click\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
+		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
+		executor.executeScript(javaScriptClick, element);
+	}
+
 	public static void LoginWith(String username, String password) {
 		getWebDriver().manage().window().maximize();
 		getWebDriver().manage().timeouts()
@@ -43,95 +66,6 @@ public class AdministratorPageLib {
 
 	}
 
-	public static WebElement getRow(String uniqueUserInfo) {
-		WebElement element = getWebDriver().findElement(
-				By.xpath(String.format(rowFormat, uniqueUserInfo)));
-		return element;
-	}
-	public static void verifyUserInformation(String uniqueUserInfo,String columnName) {
-		UserDataBean dataBean = new UserDataBean();
-		UserForm userForm = new UserForm();
-		openUserInformation(uniqueUserInfo);
-
-		dataBean.setFirstName(userForm.getFirstName());
-		dataBean.setLastName(userForm.getLastName());
-		dataBean.setEmail(userForm.getEmail());
-		dataBean.setPhone(userForm.getPhone());
-		dataBean.setRole(userForm.getRole());
-		println "UserInformation from PopUp = "+dataBean.toString();
-		userForm.closeInfoPopup();
-
-		if(columnName.equalsIgnoreCase("Name"))
-		{
-			verifyRowWithDataPresentInColumn(columnName, dataBean.getFirstName()+" " + dataBean.getLastName());
-			verifyRowColData(uniqueUserInfo,columnName, dataBean.getFirstName()+" " + dataBean.getLastName());
-		}
-		else if(columnName.equalsIgnoreCase("Email"))
-		{
-			verifyRowWithDataPresentInColumn(columnName, dataBean.getEmail());
-			verifyRowColData(uniqueUserInfo, columnName, dataBean.getEmail());
-		}
-		else if(columnName.equalsIgnoreCase("Phone"))
-		{
-			verifyRowWithDataPresentInColumn(columnName, dataBean.getPhone());
-			verifyRowColData(uniqueUserInfo, columnName, dataBean.getPhone());
-
-		}
-		else if(columnName.equalsIgnoreCase("User Role"))
-		{
-			verifyRowWithDataPresentInColumn(columnName, dataBean.getRole());
-			verifyRowColData(uniqueUserInfo, columnName, dataBean.getRole());
-		}
-	}
-	public static void verifyUserInformation(String uniqueUserInfo) {
-		UserDataBean dataBean = new UserDataBean();
-		UserForm userForm = new UserForm();
-		openUserInformation(uniqueUserInfo);
-
-		dataBean.setFirstName(userForm.getFirstName());
-		dataBean.setLastName(userForm.getLastName());
-		dataBean.setEmail(userForm.getEmail());
-		dataBean.setPhone(userForm.getPhone());
-
-		println "UserInformation from PopUp = "+dataBean.toString();
-		userForm.closeInfoPopup();
-
-		WebElement row = getRow(uniqueUserInfo);
-		String rowContent = row.getText();
-		if(rowContent.contains(dataBean.getFirstName()))
-			println "First Name "+dataBean.getFirstName() +" is proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
-		else
-			failTestWithMessage("First Name "+dataBean.getFirstName()+" is not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
-
-		if(rowContent.contains(dataBean.getLastName()))
-			println "Last Name "+dataBean.getLastName()+" is proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
-		else
-			failTestWithMessage("Last Name "+dataBean.getLastName()+" is not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
-
-		if(rowContent.contains(dataBean.getEmail()))
-			println "Email is "+dataBean.getEmail()+" proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
-		else
-			failTestWithMessage("Email is "+dataBean.getEmail()+" not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
-	}
-
-	public static void openUserInformation(String uniqueUserInfo) {
-		WebElement rowSelector = getRow(uniqueUserInfo).findElement(By.xpath(".//td[1]"));
-		rowSelector.click();
-		getWebDriver().findElement(By.xpath(rowEditLoc)).click();
-		pause(10000);
-	}
-
-
-	public static void verifyRowColData(String rowData,String colName,String dataToVerify) {
-		int colIndex=getColumnIndex(colName);
-		WebElement rowcoldata = getRow(rowData).findElement(By.xpath(".//td["+colIndex+"]"));
-		if(rowcoldata.getText().equalsIgnoreCase(dataToVerify)){
-			println ("Row with data "+ rowData+" contains " + dataToVerify+" in column "+ colName);
-		}else{
-			failTestWithMessage("Row with data "+ rowData+" does not contain " + dataToVerify+" in column "+ colName);
-		}
-		pause(3000);
-	}
 
 	public static void NavigateToTab(String tabLabel) {
 		getWebDriver().findElement(
@@ -177,17 +111,7 @@ public class AdministratorPageLib {
 		return colheader;
 	}
 
-	private static void mouseOverViaJS(WebElement element) {
-		String javaScriptMouseOver = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
-		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
-		executor.executeScript(javaScriptMouseOver, element);
-	}
 
-	private static void mouseClickViaJS(WebElement element) {
-		String javaScriptClick = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"click\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
-		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
-		executor.executeScript(javaScriptClick, element);
-	}
 
 	public static void openColumnSortingPopup(String columnName) {
 		pause(10000);
@@ -208,6 +132,63 @@ public class AdministratorPageLib {
 		pause(1000);
 		mouseClickViaJS(we);
 		pause(2000);
+	}
+
+	public static int getNumberOfRows(){
+		return getColumnData(3).size();
+	}
+
+	public static int getNumberOfColumns() {
+		pause(2000);
+
+		List<WebElement> elements = getWebDriver().findElements(
+				By.xpath(headerColsLoc));
+		return elements.size();
+	}
+
+	public static WebElement getRow(String uniqueUserInfo) {
+		WebElement element = getWebDriver().findElement(
+				By.xpath(String.format(rowFormat, uniqueUserInfo)));
+		return element;
+	}
+
+	public static ArrayList<String> getColumnData(int i) {
+		ArrayList<String> texts = new ArrayList<String>();
+		String loc = String.format(dataColLocFormat, i);
+		List<WebElement> elements = getWebDriver().findElements(By.xpath(loc));
+		for (WebElement element : elements) {
+			texts.add(element.getText().trim().toLowerCase());
+		}
+		println("Data in column # " + i + " is " + texts);
+		return texts;
+	}
+
+	public static ArrayList<String> getColumnData(String columnName) {
+		pause(2000);
+		int colIndex = getColumnIndex(columnName);
+		println("Data in column is as follows" + columnName);
+		return getColumnData(colIndex);
+	}
+
+	public static int getColumnIndex(String columnName) {
+		int colIndex=0;
+		String loc = "//div[@id='adminUsersGrid']//div[contains(@class,'x-column-header') and contains(@id,'gridcolumn') and not(contains(@class,'inner'))and not(contains(@class,'x-column-header-trigger'))]";
+		List<WebElement> elements = getWebDriver().findElements(By.xpath(loc));
+		for (int i = 0; i < elements.size(); i++) {
+			if (elements.get(i).getText().trim().equalsIgnoreCase(columnName)) {
+				colIndex = i + 1;
+				break;
+			}
+
+		}
+		return colIndex;
+	}
+
+	public static void openUserInformation(String uniqueUserInfo) {
+		WebElement rowSelector = getRow(uniqueUserInfo).findElement(By.xpath(".//td[1]"));
+		rowSelector.click();
+		getWebDriver().findElement(By.xpath(rowEditLoc)).click();
+		pause(10000);
 	}
 
 	public static boolean verifyPagingSize(int size) {
@@ -245,60 +226,8 @@ public class AdministratorPageLib {
 
 	}
 
-	private static WebDriver getWebDriver() {
-		try {
-			WebDriver driver = SpireonTestBase.getWebDriver();
-			return driver;
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
-	public static void customSpireonJavaLib2(String name, String pass) {
-		println("customSpieronJavaLib:SpieronJavaLib" + name + pass);
-	}
 
-	public static int getNumberOfColumns() {
-		pause(2000);
-
-		List<WebElement> elements = getWebDriver().findElements(
-				By.xpath(headerColsLoc));
-		return elements.size();
-	}
-
-	private static ArrayList<String> getColumnData(int i) {
-		ArrayList<String> texts = new ArrayList<String>();
-		String loc = String.format(dataColLocFormat, i);
-		List<WebElement> elements = getWebDriver().findElements(By.xpath(loc));
-		for (WebElement element : elements) {
-			texts.add(element.getText().trim().toLowerCase());
-		}
-		println("Data in column # " + i + " is " + texts);
-		return texts;
-	}
-
-	private static ArrayList<String> getColumnData(String columnName) {
-		pause(2000);
-		int colIndex = getColumnIndex(columnName);
-		println("Data in column is as follows" + columnName);
-		return getColumnData(colIndex);
-	}
-	private static int getColumnIndex(String columnName) {
-		int colIndex=0;
-		String loc = "//div[@id='adminUsersGrid']//div[contains(@class,'x-column-header') and contains(@id,'gridcolumn') and not(contains(@class,'inner'))and not(contains(@class,'x-column-header-trigger'))]";
-		List<WebElement> elements = getWebDriver().findElements(By.xpath(loc));
-		for (int i = 0; i < elements.size(); i++) {
-			if (elements.get(i).getText().trim().equalsIgnoreCase(columnName)) {
-				colIndex = i + 1;
-				break;
-			}
-
-		}
-		return colIndex;
-	}
 	public static void verifyRowWithDataPresentInColumn(String columnName, String data) {
 		pause(2000);
 		ArrayList<String> datas = getColumnData(columnName);
@@ -399,9 +328,87 @@ public class AdministratorPageLib {
 			println (columnNameToMove +" is draggable from index "+initialIndex +" to "+newIndex);
 	}
 
-	public static int getNumberOfRows(){
-		return getColumnData(3).size();
+
+
+	public static void verifyUserInformation(String uniqueUserInfo,String columnName) {
+		UserDataBean dataBean = new UserDataBean();
+		UserForm userForm = new UserForm();
+		openUserInformation(uniqueUserInfo);
+
+		dataBean.setFirstName(userForm.getFirstName());
+		dataBean.setLastName(userForm.getLastName());
+		dataBean.setEmail(userForm.getEmail());
+		dataBean.setPhone(userForm.getPhone());
+		dataBean.setRole(userForm.getRole());
+		println "UserInformation from PopUp = "+dataBean.toString();
+		userForm.closeInfoPopup();
+
+		if(columnName.equalsIgnoreCase("Name"))
+		{
+			verifyRowWithDataPresentInColumn(columnName, dataBean.getFirstName()+" " + dataBean.getLastName());
+			verifyRowColData(uniqueUserInfo,columnName, dataBean.getFirstName()+" " + dataBean.getLastName());
+		}
+		else if(columnName.equalsIgnoreCase("Email"))
+		{
+			verifyRowWithDataPresentInColumn(columnName, dataBean.getEmail());
+			verifyRowColData(uniqueUserInfo, columnName, dataBean.getEmail());
+		}
+		else if(columnName.equalsIgnoreCase("Phone"))
+		{
+			verifyRowWithDataPresentInColumn(columnName, dataBean.getPhone());
+			verifyRowColData(uniqueUserInfo, columnName, dataBean.getPhone());
+
+		}
+		else if(columnName.equalsIgnoreCase("User Role"))
+		{
+			verifyRowWithDataPresentInColumn(columnName, dataBean.getRole());
+			verifyRowColData(uniqueUserInfo, columnName, dataBean.getRole());
+		}
 	}
+	public static void verifyUserInformation(String uniqueUserInfo) {
+		UserDataBean dataBean = new UserDataBean();
+		UserForm userForm = new UserForm();
+		openUserInformation(uniqueUserInfo);
+
+		dataBean.setFirstName(userForm.getFirstName());
+		dataBean.setLastName(userForm.getLastName());
+		dataBean.setEmail(userForm.getEmail());
+		dataBean.setPhone(userForm.getPhone());
+
+		println "UserInformation from PopUp = "+dataBean.toString();
+		userForm.closeInfoPopup();
+
+		WebElement row = getRow(uniqueUserInfo);
+		String rowContent = row.getText();
+		if(rowContent.contains(dataBean.getFirstName()))
+			println "First Name "+dataBean.getFirstName() +" is proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
+		else
+			failTestWithMessage("First Name "+dataBean.getFirstName()+" is not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
+
+		if(rowContent.contains(dataBean.getLastName()))
+			println "Last Name "+dataBean.getLastName()+" is proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
+		else
+			failTestWithMessage("Last Name "+dataBean.getLastName()+" is not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
+
+		if(rowContent.contains(dataBean.getEmail()))
+			println "Email is "+dataBean.getEmail()+" proper for user with details : "+uniqueUserInfo+", Details Shown are "+ dataBean.toString();
+		else
+			failTestWithMessage("Email is "+dataBean.getEmail()+" not proper for user with details : "+uniqueUserInfo+"; Actual is "+ dataBean.toString());
+	}
+
+	public static void verifyRowColData(String rowData,String colName,String dataToVerify) {
+		int colIndex=getColumnIndex(colName);
+		WebElement rowcoldata = getRow(rowData).findElement(By.xpath(".//td["+colIndex+"]"));
+		if(rowcoldata.getText().equalsIgnoreCase(dataToVerify)){
+			println ("Row with data "+ rowData+" contains " + dataToVerify+" in column "+ colName);
+		}else{
+			failTestWithMessage("Row with data "+ rowData+" does not contain " + dataToVerify+" in column "+ colName);
+		}
+		pause(3000);
+	}
+
+
+
 	public static void failTestWithMessage(String msg) {
 		SpireonTestBase.captureScreenShot();
 		throw new VerificationError(msg);
@@ -413,10 +420,6 @@ public class AdministratorPageLib {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static  main(args){
-		println("main:SpieronJavaLib");
 	}
 
 }

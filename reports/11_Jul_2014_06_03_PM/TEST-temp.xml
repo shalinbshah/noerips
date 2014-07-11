@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="1" skip="0" tests="1" name="Temp">
+<testcase classname="Temp.Lib Test" time="43" name="0005_(Users Grid - Display)-list-unique-login-credential">
+<failure message="I failed It" type="AssertionError"></failure>
+</testcase>
+</testsuite>

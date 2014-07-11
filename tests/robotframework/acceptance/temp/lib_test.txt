@@ -23,5 +23,8 @@ Spieron Suite SetUp
 
 *** Test Cases ***
 0005_(Users Grid - Display)-list-unique-login-credential
+	Login With	${USERNAME}	${PASSWORD}
+    Navigate To Tab	Admin
+    open Admin Section	Users
     failTestWithMessage	I failed It
 

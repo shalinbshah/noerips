@@ -96,7 +96,7 @@
 						<extraPathDirectory>libs/Selenium2Library</extraPathDirectory>
 						<extraPathDirectory>libs/SpireonKeywordsLib.jar</extraPathDirectory>
 					</extraPathDirectories>
-					<testCasesDirectory>tests/robotframework/acceptance/poc</testCasesDirectory>
+					<testCasesDirectory>tests/robotframework/acceptance/temp</testCasesDirectory>
 					<outputDirectory>reports/${timestamp}</outputDirectory>
 				</configuration>
 				<executions>
