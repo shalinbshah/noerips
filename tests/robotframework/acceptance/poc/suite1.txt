@@ -1,0 +1,160 @@
+*** Settings ***
+Library	Selenium2Library
+Library	BuiltIn
+Library	AdministratorPageLib
+Resource	resource.txt
+Suite Setup	Spieron Suite SetUp
+Suite Teardown	Close All Browsers
+Test Setup	Go To	${LOGOUT URL}
+
+*** Variables ***
+
+${SERVER}   http://amw1v2localfleet1.stage.spireon.com/home/
+${BROWSER}	firefox
+${DELAY}	0
+${USERNAME}	eggtruck
+${PASSWORD}	password
+
+*** Keywords ***
+Spieron Suite SetUp
+	Open Browser    about:blank    ff
+	Register Keyword To Run On Failure	Selenium2Library.Capture Page Screenshot
+
+
+*** Test Cases ***
+
+0001_(Users Grid - Display)-list - displays a list of users for a given account
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    ${rowsSize}=	getNumberOfRows
+    Should Be True	5 < ${rowsSize} < 25
+    
+    
+0002_(Users Grid - Display)-list-master-user
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	User Roles	Administrator
+
+0003_(Users Grid - Display)-list-subaccount-users
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	User Roles	Auto1-20140606155601
+
+0004_(Users Grid - Display)-list-unique-login-credential
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyUniqueRowsInColumn	Username 
+
+
+0005_(Users Grid - Display)columns-in order: Name,Username,Email,Phone,User Roles,Access
+
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+	verifyColumnsInOrder	Name,Username,Email,Phone,User Roles,User Access
+
+0006_(Users Grid - Display)-column'Name'-user-entered'First'-and-'Last Name'
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyUserInformation	Egg Truck	Name
+    
+0007_(Users Grid - Display)
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Username	${USERNAME}
+    
+0008_(Users Grid - Display)
+	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Name	Egg Truck
+    
+0009_(Users Grid - Display)
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Phone	(951) 676-1699
+
+0010_(Users Grid - Display)-10-column 'User Permission/Role' - name of given or custom permission role
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+	verifyUserInformation	Amit Sharma	User Roles
+	
+0012_(Users Grid - Display)-10-0010_(Users Grid - Display)-10-column 'User Permission/Role' - name of given or custom permission role
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+	verifyColumnsInOrder	Name,Username,Email,Phone,User Roles,User Access,Comments
+
+0014_(Users Grid - Display) - 14
+    LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyPagingSize	25
+    
+0015_(Users Grid - Display)-15-accuracy-data displayed on grid matches with individual user's account information
+	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyUserInformation	Egg Truck
+	
+0016_(User Grid - Columns Functionality)-1-hide - columns: Name, Username, Email, Phone, Comments, User Access, User Permissions/Role
+	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+	openColumnSortingPopup	Username
+	hideColumnAndVerifyVisibility	Name
+	hideColumnAndVerifyVisibility	Username
+	hideColumnAndVerifyVisibility	Email
+	hideColumnAndVerifyVisibility	Phone
+	hideColumnAndVerifyVisibility	User Roles
+	
+
+0017_(User Grid - Columns Functionality)-1-hide - columns: Name, Username, Email, Phone, Comments, User Access, User Permissions/Role
+	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+	openColumnSortingPopup	Username
+	showColumnAndVerifyVisibility	Name
+	showColumnAndVerifyVisibility	Username
+	showColumnAndVerifyVisibility	Email
+	showColumnAndVerifyVisibility	Phone
+	showColumnAndVerifyVisibility	User Roles
+	
+0018_(User Grid-ColumnsFunctionality)
+   	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Username	${USERNAME}
+    verifySortingFunctionality	Username
+    openColumnSortingPopup	Username
+
+0019_(User Grid-ColumnsFunctionality)
+   	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Username	${USERNAME}
+    verifySortingFunctionality	Username
+    openColumnSortingPopup	Username
+
+0020_(User Grid - Columns Functionality) - 5
+   	LoginWith	${USERNAME}	${PASSWORD}
+    NavigateToTab	Admin
+    openAdminSection	Users
+    verifyRowWithDataPresentInColumn	Username	${USERNAME}
+    verifySortingFunctionality	Username
+    openColumnSortingPopup	Username    
+
+0021_(User Grid - Columns Functionality)-6-moving - a column can be moved to any position within the header
+	LoginWith	${USERNAME}	${PASSWORD}
+	NavigateToTab	Admin
+	openAdminSection	Users
+	verifyColumnDragAndDrop	Name	Email
+    

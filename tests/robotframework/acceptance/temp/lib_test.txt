@@ -1,0 +1,27 @@
+*** Settings ***
+Library	Selenium2Library
+Library	BuiltIn
+Library	AdministratorPageLib
+Resource	resource.txt
+Suite Setup	Spieron Suite SetUp
+Suite Teardown	Close All Browsers
+Test Setup	Go To	${LOGOUT URL}
+
+*** Variables ***
+
+${SERVER}   http://amw1v2localfleet1.stage.spireon.com/home/
+${BROWSER}	firefox
+${DELAY}	0
+${USERNAME}	eggtruck
+${PASSWORD}	password
+
+*** Keywords ***
+Spieron Suite SetUp
+	Open Browser    about:blank    ff
+	Register Keyword To Run On Failure	Selenium2Library.Capture Page Screenshot
+
+
+*** Test Cases ***
+0005_(Users Grid - Display)-list-unique-login-credential
+    failTestWithMessage	I failed It
+
