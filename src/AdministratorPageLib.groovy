@@ -38,6 +38,7 @@ public class AdministratorPageLib {
 		}
 		return null;
 	}
+
 	private static void mouseOverViaJS(WebElement element) {
 		String javaScriptMouseOver = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
 		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
@@ -48,6 +49,19 @@ public class AdministratorPageLib {
 		String javaScriptClick = "var evObj = document.createEvent('MouseEvents');evObj.initMouseEvent(\"click\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);arguments[0].dispatchEvent(evObj);";
 		JavascriptExecutor executor = (JavascriptExecutor) getWebDriver();
 		executor.executeScript(javaScriptClick, element);
+	}
+
+	private static void failTestWithMessage(String msg) {
+		SpireonTestBase.captureScreenShot();
+		throw new VerificationError(msg);
+	}
+
+	private static void pause(int i) {
+		try {
+			Thread.sleep(i);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void LoginWith(String username, String password) {
@@ -104,14 +118,12 @@ public class AdministratorPageLib {
 		// By.xpath("//span[contains(.,'Sort Descending')]")).click();
 	}
 
-	private static WebElement getColumnHeaderEle(String columnName) {
+	public static WebElement getColumnHeaderEle(String columnName) {
 		String loc = String.format(headerColsNameLocFormat, columnName);
 		WebDriver driver = getWebDriver();
 		WebElement colheader = driver.findElement(By.xpath(loc));
 		return colheader;
 	}
-
-
 
 	public static void openColumnSortingPopup(String columnName) {
 		pause(10000);
@@ -405,21 +417,6 @@ public class AdministratorPageLib {
 			failTestWithMessage("Row with data "+ rowData+" does not contain " + dataToVerify+" in column "+ colName);
 		}
 		pause(3000);
-	}
-
-
-
-	public static void failTestWithMessage(String msg) {
-		SpireonTestBase.captureScreenShot();
-		throw new VerificationError(msg);
-	}
-
-	public static void pause(int i) {
-		try {
-			Thread.sleep(i);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
